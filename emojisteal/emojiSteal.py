@@ -76,15 +76,13 @@ class EmojiSteal(commands.Cog):
     @commands.bot_has_permissions(manage_emojis=True, add_reactions=True)
     async def steal_upload_command(self, ctx: commands.Context, *names: str):
         """Steals emojis you reply to and uploads them to this server."""
-        print(names)
         if not (emojis := await self.steal_ctx(ctx)):
             return
-        print("1: " + names)
+        
         names = [''.join(re.findall(r"\w+", name)) for name in names]
-        print("2: " + names)
         names = [name if len(name) >= 2 else None for name in names]
-        print("3: " + names)
         emojis = list(dict.fromkeys(emojis))
+        print(emojis)
 
         async with aiohttp.ClientSession() as session:
             for emoji, name in zip_longest(emojis, names):
@@ -95,6 +93,7 @@ class EmojiSteal(commands.Cog):
                 try:
                     async with session.get(emoji.url) as resp:
                         image = io.BytesIO(await resp.read()).read()
+                    print(name, 'blank', emoji.name)
                     added = await ctx.guild.create_custom_emoji(name=name or emoji.name, image=image)
                 except Exception as error:
                     return await ctx.send(f"{EMOJI_FAIL} {emoji.name}, {type(error).__name__}: {error}")

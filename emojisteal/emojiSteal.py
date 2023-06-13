@@ -79,9 +79,11 @@ class EmojiSteal(commands.Cog):
         print(names)
         if not (emojis := await self.steal_ctx(ctx)):
             return
-        
+        print("1: " + names)
         names = [''.join(re.findall(r"\w+", name)) for name in names]
+        print("2: " + names)
         names = [name if len(name) >= 2 else None for name in names]
+        print("3: " + names)
         emojis = list(dict.fromkeys(emojis))
 
         async with aiohttp.ClientSession() as session:

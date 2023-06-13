@@ -1,4 +1,4 @@
 from .emojiSteal import EmojiSteal
 
-def setup(bot):
-    bot.add_cog(EmojiSteal(bot))
+async def setup(bot):
+    await bot.add_cog(EmojiSteal(bot))

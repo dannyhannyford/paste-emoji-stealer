@@ -61,16 +61,16 @@ class EmojiSteal(commands.Cog):
             return None
         return emojis
     
-    @commands.group(name="steal", aliases=["emojisteal"], invoke_without_command=True)
-    async def steal_command(self, ctx: commands.Context):
-        """Steals the emojis of the message you reply to. Can also upload them with [p]steal upload."""
-        if not (emojis := await self.steal_ctx(ctx)):
-            return
-        response = '\n'.join([emoji.url for emoji in emojis])
-        print(response)
-        await ctx.send(response)
+    # @commands.group(name="steal", aliases=["emojisteal"], invoke_without_command=True)
+    # async def steal_command(self, ctx: commands.Context):
+    #     """Steals the emojis of the message you reply to. Can also upload them with [p]steal upload."""
+    #     if not (emojis := await self.steal_ctx(ctx)):
+    #         return
+    #     response = '\n'.join([emoji.url for emoji in emojis])
+    #     print(response)
+    #     await ctx.send(response)
 
-    @steal_command.command(name="upload")
+    @commands.command(name="steal")
     @commands.guild_only()
     @commands.has_permissions(manage_emojis=True)
     @commands.bot_has_permissions(manage_emojis=True, add_reactions=True)

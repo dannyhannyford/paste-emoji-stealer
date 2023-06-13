@@ -36,11 +36,6 @@ class EmojiSteal(commands.Cog):
         super().__init__()
         self.bot = bot
 
-    ## cleanup
-    async def cog_unload(self) -> None:
-        self.bot.tree.remove_command(self.steal_context_menu.name, type=self.steal_context_menu.type)
-        self.bot.tree.remove_command(self.steal_upload_context_menu)
-
     @staticmethod
     def get_emojis(content: str) -> Optional[List[StolenEmoji]]:
         results = re.findall(r"<(a?):(\w+):(\d{10,20})>", content)

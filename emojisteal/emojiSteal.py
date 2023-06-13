@@ -91,7 +91,7 @@ class EmojiSteal(commands.Cog):
                 try:
                     async with session.get(emoji.url) as resp:
                         image = io.BytesIO(await resp.read()).read()
-                    added = await ctx.guild.create_custom_emoji(emoji.name, image=image)
+                    added = await ctx.guild.create_custom_emoji(name=emoji.name, image=image)
                 except Exception as error:
                     return await ctx.send(f"{EMOJI_FAIL} {emoji.name}, {type(error).__name__}: {error}")
                 try:

@@ -63,15 +63,13 @@ class EmojiSteal(commands.Cog):
         if not message:
             await ctx.send(MESSAGE_FAIL)
             return None
-        emojis = self.get_reactions(message.reactions)
-        if not emojis:
+        reactions = self.get_reactions(message.reactions)
+        message_emojis = self.get_emojis(message.content)
+        all_emojis = reactions + message_emojis
+        if not all_emojis:
             await ctx.send(MISSING_EMOJIS)
             return None
-        # emojis = self.get_emojis(message.content)
-        # if not emojis:
-        #     await ctx.send(MISSING_EMOJIS)
-        #     return None
-        return emojis
+        return all_emojis
 
     @commands.command(name="steal")
     @commands.guild_only()

@@ -15,7 +15,7 @@ MESSAGE_FAIL = "I couldn't grab that message, sorry."
 EMOJI_FAIL = "❌ Failed to upload"
 EMOJI_SLOTS = "⚠ This server doesn't have any more space for emojis!"
 INVALID_EMOJI = "Invalid emoji or emoji ID."
-CHANNEL_ID = 331655111644545027
+CHANNEL_ID = 1117565402004869132
 
 @dataclass(init=True, order=True, frozen=True)
 class StolenEmoji:
@@ -37,7 +37,7 @@ class EmojiSteal(commands.Cog):
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
-        self.channel = self.bot.get_channel(id=CHANNEL_ID)
+        self.channel = self.bot.get_channel(CHANNEL_ID)
 
     @staticmethod
     def get_emojis(content: str) -> Optional[List[StolenEmoji]]:
@@ -46,7 +46,7 @@ class EmojiSteal(commands.Cog):
         return [StolenEmoji(*result) for result in results]
     
     @staticmethod
-    def get_reactions(reactions: Union[Emoji, PartialEmoji, str]) -> Optional[List[StolenEmoji]]:
+    def get_reactions(reactions: List[Union[Emoji, PartialEmoji, str]]) -> Optional[List[StolenEmoji]]:
         print('reactions', reactions)
         print('formatted reactions', [StolenEmoji(*reaction) for reaction in reactions])
         return [StolenEmoji(*reaction) for reaction in reactions]
@@ -65,6 +65,7 @@ class EmojiSteal(commands.Cog):
         if not message:
             await ctx.send(MESSAGE_FAIL)
             return None
+        print('reaction before it goes in: ', message.reactions)
         emojis = self.get_reactions(message.reactions)
         if not emojis:
             await ctx.send(MISSING_EMOJIS)

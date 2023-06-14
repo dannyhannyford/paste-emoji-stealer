@@ -48,7 +48,6 @@ class EmojiSteal(commands.Cog):
     @staticmethod
     def get_reactions(reactions: List[Union[Emoji, PartialEmoji, str]]) -> Optional[List[StolenEmoji]]:
         print('reactions', reactions)
-        print('formatted reactions', [StolenEmoji(*reaction) for reaction in reactions])
         return [StolenEmoji(*reaction) for reaction in reactions]
     
     @staticmethod

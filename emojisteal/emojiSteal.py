@@ -3,9 +3,10 @@ import io
 import re
 import aiohttp
 import asyncio
+from discord import Emoji, PartialEmoji
 from dataclasses import dataclass
 from redbot.core import commands
-from typing import Optional, List
+from typing import Optional, List, Union
 from itertools import zip_longest
 
 MISSING_EMOJIS = "Can't find emojis or stickers in that message."
@@ -14,6 +15,7 @@ MESSAGE_FAIL = "I couldn't grab that message, sorry."
 EMOJI_FAIL = "❌ Failed to upload"
 EMOJI_SLOTS = "⚠ This server doesn't have any more space for emojis!"
 INVALID_EMOJI = "Invalid emoji or emoji ID."
+CHANNEL_ID = 331655111644545027
 
 @dataclass(init=True, order=True, frozen=True)
 class StolenEmoji:
@@ -35,11 +37,19 @@ class EmojiSteal(commands.Cog):
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
+        self.channel = self.bot.get_channel(id=CHANNEL_ID)
 
     @staticmethod
     def get_emojis(content: str) -> Optional[List[StolenEmoji]]:
         results = re.findall(r"<(a?):(\w+):(\d{10,20})>", content)
+        print('results: ', results)
         return [StolenEmoji(*result) for result in results]
+    
+    @staticmethod
+    def get_reactions(reactions: Union[Emoji, PartialEmoji, str]) -> Optional[List[StolenEmoji]]:
+        print('reactions', reactions)
+        print('formatted reactions', [StolenEmoji(*reaction) for reaction in reactions])
+        return [StolenEmoji(*reaction) for reaction in reactions]
     
     @staticmethod
     def available_emoji_slots(guild: discord.Guild, animated: bool):
@@ -55,20 +65,15 @@ class EmojiSteal(commands.Cog):
         if not message:
             await ctx.send(MESSAGE_FAIL)
             return None
-        emojis = self.get_emojis(message.content)
+        emojis = self.get_reactions(message.reactions)
         if not emojis:
             await ctx.send(MISSING_EMOJIS)
             return None
+        # emojis = self.get_emojis(message.content)
+        # if not emojis:
+        #     await ctx.send(MISSING_EMOJIS)
+        #     return None
         return emojis
-    
-    # @commands.group(name="steal", aliases=["emojisteal"], invoke_without_command=True)
-    # async def steal_command(self, ctx: commands.Context):
-    #     """Steals the emojis of the message you reply to. Can also upload them with [p]steal upload."""
-    #     if not (emojis := await self.steal_ctx(ctx)):
-    #         return
-    #     response = '\n'.join([emoji.url for emoji in emojis])
-    #     print(response)
-    #     await ctx.send(response)
 
     @commands.command(name="steal")
     @commands.guild_only()
@@ -80,7 +85,6 @@ class EmojiSteal(commands.Cog):
             return
         
         emojis = list(dict.fromkeys(emojis))
-        print(emojis)
 
         async with aiohttp.ClientSession() as session:
             for emoji in emojis:

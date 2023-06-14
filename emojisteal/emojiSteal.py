@@ -15,7 +15,7 @@ MESSAGE_FAIL = "I couldn't grab that message, sorry."
 EMOJI_FAIL = "❌ Failed to upload"
 EMOJI_SLOTS = "⚠ This server doesn't have any more space for emojis!"
 INVALID_EMOJI = "Invalid emoji or emoji ID."
-CHANNEL_ID = 331655111644545027
+CHANNEL_ID = 1117565402004869132
 
 @dataclass(init=True, order=True, frozen=True)
 class StolenEmoji:
@@ -37,7 +37,7 @@ class EmojiSteal(commands.Cog):
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
-        self.channel = self.bot.get_channel(id=CHANNEL_ID)
+        self.channel = self.bot.get_channel(CHANNEL_ID)
 
     @staticmethod
     def get_emojis(content: str) -> Optional[List[StolenEmoji]]:

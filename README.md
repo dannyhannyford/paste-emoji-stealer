@@ -1,14 +1,19 @@
-### Commands
+## How to Use
 
-get_emoji - gets the image link for custom emojis or emoji ID
+reply to a message containing an emoji or reaction with `.steal`
 
-steal - steals reactions and emojis
+### bot permissions needed
 
-## ideas
+- manage_emojis
+- add_reactions
 
-lazy steal by not having to reply, only issue the command
+### ideas
+
+lazy steal by not having to reply, only issue the .steal command
 
 steal specfic emoji based off it's name
+
+### Getting Started
 
 [p]load downloader
 [p]repo add Dantannas-Cogs https://github.com/dannyhanny/paste-emoji-stealer

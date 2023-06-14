@@ -7,15 +7,13 @@ from discord import Emoji, PartialEmoji
 from dataclasses import dataclass
 from redbot.core import commands
 from typing import Optional, List, Union
-from itertools import zip_longest
 
-MISSING_EMOJIS = "Can't find emojis or stickers in that message."
+MISSING_EMOJIS = "Can't find emojis in that message."
 MISSING_REFERENCE = "Reply to a message with this command to steal an emoji."
 MESSAGE_FAIL = "I couldn't grab that message, sorry."
 EMOJI_FAIL = "❌ Failed to upload"
 EMOJI_SLOTS = "⚠ This server doesn't have any more space for emojis!"
 INVALID_EMOJI = "Invalid emoji or emoji ID."
-CHANNEL_ID = 1117565402004869132
 
 @dataclass(init=True, order=True, frozen=True)
 class StolenEmoji:
@@ -37,7 +35,6 @@ class EmojiSteal(commands.Cog):
     def __init__(self, bot):
         super().__init__()
         self.bot = bot
-        self.channel = self.bot.get_channel(CHANNEL_ID)
 
     @staticmethod
     def get_emojis(content: str) -> Optional[List[StolenEmoji]]:
@@ -76,10 +73,9 @@ class EmojiSteal(commands.Cog):
     @commands.has_permissions(manage_emojis=True)
     @commands.bot_has_permissions(manage_emojis=True, add_reactions=True)
     async def steal_upload_command(self, ctx: commands.Context):
-        """Steals emojis you reply to and uploads them to this server."""
+        """Steals emojis and emoji reactions you reply to and uploads them to this server."""
         if not (emojis := await self.steal_ctx(ctx)):
             return
-        
         emojis = list(dict.fromkeys(emojis))
 
         async with aiohttp.ClientSession() as session:
@@ -98,16 +94,3 @@ class EmojiSteal(commands.Cog):
                     await ctx.message.add_reaction(added)
                 except:
                     pass
-
-    @commands.command()
-    async def get_emoji(self, ctx: commands.Context, *, emoji: str):
-        """Get the image link for custom emojis or an emoji ID."""
-        emoji = emoji.strip()
-        if emoji.isnumeric():
-            emojis = [StolenEmoji(False, "e", int(emoji)), StolenEmoji(True, "e", int(emoji))]
-        elif not (emojis := self.get_emojis(emoji)):
-            await ctx.send(INVALID_EMOJI)
-            return
-        await ctx.send('\n'.join(emoji.url for emoji in emojis))
-
-

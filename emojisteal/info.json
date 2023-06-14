@@ -3,5 +3,5 @@
   "install_msg": "Thanks for using PasteCogs",
   "name": "emojisteal",
   "short": "Steal Emojis",
-  "description": "Cog to steal emojis and stickers"
+  "description": "reply to a message with .steal to steal emojis and reactions"
 }

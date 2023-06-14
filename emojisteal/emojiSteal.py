@@ -46,9 +46,10 @@ class EmojiSteal(commands.Cog):
         return [StolenEmoji(*result) for result in results]
     
     @staticmethod
-    def get_reactions(reactions: List[Union[Emoji, PartialEmoji, str]]) -> Optional[List[StolenEmoji]]:
+    def get_reactions(reactions: List[Union[Emoji, PartialEmoji, str]]): #-> Optional[List[StolenEmoji]]:
         print('reactions', reactions)
-        return [StolenEmoji(*reaction) for reaction in reactions]
+        return 
+        # return [StolenEmoji(*reaction) for reaction in reactions]
     
     @staticmethod
     def available_emoji_slots(guild: discord.Guild, animated: bool):

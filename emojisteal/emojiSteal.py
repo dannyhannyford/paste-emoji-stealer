@@ -46,7 +46,7 @@ class EmojiSteal(commands.Cog):
         return [StolenEmoji(*result) for result in results]
     
     @staticmethod
-    def get_reactions(reactions: Union[Emoji, PartialEmoji, str]) -> Optional[List[StolenEmoji]]:
+    def get_reactions(reactions: List[Union[Emoji, PartialEmoji, str]]) -> Optional[List[StolenEmoji]]:
         print('reactions', reactions)
         print('formatted reactions', [StolenEmoji(*reaction) for reaction in reactions])
         return [StolenEmoji(*reaction) for reaction in reactions]
@@ -65,6 +65,7 @@ class EmojiSteal(commands.Cog):
         if not message:
             await ctx.send(MESSAGE_FAIL)
             return None
+        print('reaction before it goes in: ', message.reactions)
         emojis = self.get_reactions(message.reactions)
         if not emojis:
             await ctx.send(MISSING_EMOJIS)
